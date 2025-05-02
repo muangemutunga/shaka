@@ -63,18 +63,19 @@
         </nav>
     </header>
 
-    <section id="hero">
-        <div class="hero-content">
-            <h1>Precision. Power. <span class="highlight">Quantumly.</span></h1>
-            <p>Join us build AI that will benefits the world.</p>
-            <a href="{{ url_for('application') }}" class="cta-button">Apply Now</a>
-        </div>
-        <div class="hero-visual">
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-            <div class="quantum-particle"></div>
-        </div>
-    </section>
+<section id="hero" style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ url_for('static', filename='images/hero-bg.jpg') }}') center/cover no-repeat;">
+    <div class="hero-content">
+        <h1>Precision. Power. <span class="highlight">Quantumly.</span></h1>
+        <p>Join us build AI that will benefit the world.</p>
+        <a href="{{ url_for('application') }}" class="cta-button">Apply Now</a>
+    </div>
+    <div class="hero-visual">
+        <div class="quantum-particle"></div>
+        <div class="quantum-particle"></div>
+        <div class="quantum-particle"></div>
+    </div>
+</section>
+
 
     <section id="about">
         <div class="section-header">
