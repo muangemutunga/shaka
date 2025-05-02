@@ -1729,26 +1729,6 @@ nav ul.active {
     }
 }
 
-/* Default: Desktop view (horizontal nav) */
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: white;
-    position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-nav .burger ul {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-}
-
-nav .burger::before {
-    display: none; /* Hide hamburger icon on desktop */
-}
 
 /* Mobile styles */
 @media (max-width: 767px) {
