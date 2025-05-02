@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply - Quantumly</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="logo-container">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- SVG logo content -->
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#18cb96"/>
+                        <stop offset="100%" stop-color="#0f8a65"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="url(#gradient)" stroke-width="8" opacity="0.8"/>
+                <circle cx="100" cy="100" r="40" fill="url(#gradient)" opacity="0.9"/>
+                <circle cx="160" cy="100" r="12" fill="#18cb96" opacity="0.7">
+                    <animate attributeName="cx" values="160;100;40;100;160" dur="8s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="100;160;100;40;100" dur="8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="40" cy="100" r="12" fill="#18cb96" opacity="0.7">
+                    <animate attributeName="cx" values="40;100;160;100;40" dur="8s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="100;40;100;160;100" dur="8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="100" cy="100" r="20" fill="white" opacity="0.2">
+                    <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <path d="M115,100 A15,15 0 1,1 100,85 L100,115 A15,15 0 1,1 115,100 L125,110" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="50" height="50">
+                    <defs>
+                        <linearGradient id="nav-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#18cb96"/>
+                            <stop offset="100%" stop-color="#0f8a65"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="url(#nav-gradient)" stroke-width="8" opacity="0.8"/>
+                    <circle cx="100" cy="100" r="40" fill="url(#nav-gradient)" opacity="0.9"/>
+                    <path d="M115,100 A15,15 0 1,1 100,85 L100,115 A15,15 0 1,1 115,100 L125,110" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+                <span>Quantumly</span>
+            </div>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="application-section">
+        <div class="section-header">
+            <h1>Join <span class="highlight">Quantumly</span></h1>
+            <p class="subheading">Complete the application form below to start your journey with us.</p>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="application-container">
+            <form id="applicationForm" action="{{ url_for('submit_application') }}" method="POST" enctype="multipart/form-data">
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h2>Personal Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="last_name">Last Name (Family Name) *</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="first_name">First Name *</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number (with country code) *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 123-456-7890" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Current Location *</label>
+                        <input type="text" id="location" name="location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="current_company">Current Company *</label>
+                        <input type="text" id="current_company" name="current_company" required>
+                    </div>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="form-section">
+                    <h2>Social Links</h2>
+                    
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn Profile</label>
+                        <input type="url" id="linkedin" name="linkedin" placeholder="https://www.linkedin.com/in/yourprofile">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="facebook">Facebook Profile</label>
+                        <input type="url" id="facebook" name="facebook" placeholder="https://www.facebook.com/yourprofile">
+                    </div>
+                </div>
+                
+                <!-- Application Details -->
+                <div class="form-section">
+                    <h2>Application Details</h2>
+                    
+                    <div class="form-group">
+                        <label for="country_birth">Country of Birth *</label>
+                        <select id="country_birth" name="country_birth" required>
+                            <option value="">-- Select Country --</option>
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <!-- Add more countries as needed -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country_residence">Country of Residence *</label>
+                        <select id="country_residence" name="country_residence" required>
+                            <option value="">-- Select Country --</option>
+                            <option value="United States">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <!-- Add more countries as needed -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="usStateContainer" style="display: none;">
+                        <label for="us_state">US State</label>
+                        <select id="us_state" name="us_state">
+                            <option value="">-- Select State --</option>
+                            <!-- US states will be filled in by the client -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="extra_language">Additional Languages</label>
+                        <select id="extra_language" name="extra_language">
+                            <option value="">-- Select Language --</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Mandarin">Mandarin</option>
+                            <option value="Arabic">Arabic</option>
+                            <!-- Add more languages as needed -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="education">Highest Education *</label>
+                        <select id="education" name="education" required>
+                            <option value="">-- Select Education Level --</option>
+                            <option value="High School">High School</option>
+                            <option value="Associate's Degree">Associate's Degree</option>
+                            <option value="Bachelor's Degree">Bachelor's Degree</option>
+                            <option value="Master's Degree">Master's Degree</option>
+                            <option value="Doctorate">Doctorate</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="payrate">Preferred Pay Rate (per hour, USD) *</label>
+                        <input type="number" id="payrate" name="payrate" min="10" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hours_per_week">Available Hours Per Week *</label>
+                        <input type="number" id="hours_per_week" name="hours_per_week" min="5" max="40" required>
+                    </div>
+                </div>
+                
+                <!-- Inclusivity Information -->
+                <div class="form-section">
+                    <h2>Inclusivity Information</h2>
+                    <p class="inclusivity-note">U.S. companies are required to provide equal employment opportunities to all employees and applicants regardless of race, color, religion, sex, national origin, age, disability or genetic information. The following information helps us comply with these requirements.</p>
+                    
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender">
+                            <option value="">Prefer not to say</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Non-Binary">Non-Binary</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="race">Race/Ethnicity</label>
+                        <select id="race" name="race">
+                            <option value="">Prefer not to say</option>
+                            <option value="Asian">Asian</option>
+                            <option value="Black or African American">Black or African American</option>
+                            <option value="Hispanic or Latino">Hispanic or Latino</option>
+                            <option value="Native American">Native American</option>
+                            <option value="White">White</option>
+                            <option value="Two or More Races">Two or More Races</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="veteran_status">Veteran Status</label>
+                        <select id="veteran_status" name="veteran_status">
+                            <option value="">Prefer not to say</option>
+                            <option value="Not a Veteran">Not a Veteran</option>
+                            <option value="Veteran">Veteran</option>
+                            <option value="Disabled Veteran">Disabled Veteran</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Document Uploads -->
+                <div class="form-section">
+                    <h2>Document Uploads</h2>
+                    
+                    <div class="form-group">
+                        <label for="photo">Passport Size Photo *</label>
+                        <input type="file" id="photo" name="photo" accept=".jpg,.jpeg,.png" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resume">Resume/CV *</label>
+                        <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cover_letter">Cover Letter *</label>
+                        <input type="file" id="cover_letter" name="cover_letter" accept=".pdf,.doc,.docx" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="proof_residence">Proof of Residence *</label>
+                        <input type="file" id="proof_residence" name="proof_residence" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dl_front">Front Side of ID/Driver's License *</label>
+                        <input type="file" id="dl_front" name="dl_front" accept=".jpg,.jpeg,.png" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dl_back">Back Side of ID/Driver's License *</label>
+                        <input type="file" id="dl_back" name="dl_back" accept=".jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+                
+                <!-- Terms and Submit -->
+                <div class="form-section">
+                    <div class="form-group terms-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and <a href="#" class="privacy-link">Privacy Policy</a> of Quantumly.</label>
+                    </div>
+                    
+                    <div class="submit-container">
+                        <button type="submit" class="cta-button">Submit Application</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+                    <defs>
+                        <linearGradient id="footer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#18cb96"/>
+                            <stop offset="100%" stop-color="#0f8a65"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="url(#footer-gradient)" stroke-width="8" opacity="0.8"/>
+                    <circle cx="100" cy="100" r="40" fill="url(#footer-gradient)" opacity="0.9"/>
+                    <path d="M115,100 A15,15 0 1,1 100,85 L100,115 A15,15 0 1,1 115,100 L125,110" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+                <span>Quantumly</span>
+            </div>
+            <p>&copy; 2025 Quantumly. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .file-link { margin-right: 10px; }
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 3px 6px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Files</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app['id'] }}</td>
+                <td>{{ app['first_name'] }} {{ app['last_name'] }}</td>
+                <td>{{ app['email'] }}</td>
+                <td>
+                    {% set files = [
+                        ('Resume', app['resume_path']),
+                        ('Photo', app['photo_path']),
+                        ('Cover Letter', app['cover_letter_path']),
+                        ('Proof of Residence', app['proof_residence_path']),
+                        ('ID Front', app['dl_front_path']),
+                        ('ID Back', app['dl_back_path'])
+                    ] %}
+                    
+                    {% for name, path in files %}
+                        {% if path %}
+                            <div>
+                                <span class="file-link">
+                                    {{ name }}: 
+                                    <a href="/uploads/{{ path }}" target="_blank">View</a>
+                                </span>
+                                <a href="/download/{{ path }}" class="download-btn">Download</a>
+                                <span>({{ path.split('.')[-1]|upper }})</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if not (app['resume_path'] or app['photo_path'] or app['cover_letter_path'] or 
+                              app['proof_residence_path'] or app['dl_front_path'] or app['dl_back_path']) %}
+                        <div>No files uploaded</div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</body>
+</html>

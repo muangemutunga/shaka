@@ -1,0 +1,90 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Quantumly</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="logo-container">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#18cb96"/>
+                        <stop offset="100%" stop-color="#0f8a65"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="url(#gradient)" stroke-width="8" opacity="0.8"/>
+                <circle cx="100" cy="100" r="40" fill="url(#gradient)" opacity="0.9"/>
+                <circle cx="160" cy="100" r="12" fill="#18cb96" opacity="0.7">
+                    <animate attributeName="cx" values="160;100;40;100;160" dur="8s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="100;160;100;40;100" dur="8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="40" cy="100" r="12" fill="#18cb96" opacity="0.7">
+                    <animate attributeName="cx" values="40;100;160;100;40" dur="8s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="100;40;100;160;100" dur="8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="100" cy="100" r="20" fill="white" opacity="0.2">
+                    <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <path d="M115,100 A15,15 0 1,1 100,85 L100,115 A15,15 0 1,1 115,100 L125,110" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="60" height="60">
+                        <defs>
+                            <linearGradient id="login-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#18cb96"/>
+                                <stop offset="100%" stop-color="#0f8a65"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="url(#login-gradient)" stroke-width="8" opacity="0.8"/>
+                        <circle cx="100" cy="100" r="40" fill="url(#login-gradient)" opacity="0.9"/>
+                        <path d="M115,100 A15,15 0 1,1 100,85 L100,115 A15,15 0 1,1 115,100 L125,110" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h1>Admin <span class="highlight">Login</span></h1>
+            </div>
+
+            {% if get_flashed_messages() %}
+            <div class="alert">
+                {% for message in get_flashed_messages() %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form action="{{ url_for('login') }}" method="POST" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <div class="login-footer">
+                    <button type="submit" class="cta-button">Log In</button>
+                </div>
+            </form>
+            
+            <div class="back-to-home">
+                <a href="{{ url_for('index') }}">Back to Home</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
