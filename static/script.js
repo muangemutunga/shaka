@@ -55,3 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+
+// Toggle mobile nav
+document.addEventListener('DOMContentLoaded', function () {
+    const burger = document.getElementById('burgerMenu');
+    const navList = burger.querySelector('ul');
+
+    burger.addEventListener('click', () => {
+        navList.classList.toggle('active');
+    });
+});
