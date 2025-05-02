@@ -1517,3 +1517,83 @@ h1, h2, h3, p {
 
 
 
+
+/* Footer */
+footer {
+    background: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #18cb96;
+    font-weight: bold;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.footer-column h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li a {
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.footer-bottom {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Mobile Responsiveness (already built-in by layout, just confirm breakpoints if needed) */
+@media (min-width: 768px) {
+    nav ul {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .about-content, .services-grid, .contact-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .stat-item, .service-card {
+        flex: 1 1 calc(50% - 1rem);
+    }
+
+    .contact-info, .contact-form {
+        flex: 1 1 48%;
+    }
+
+    .footer-links {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+
