@@ -1376,3 +1376,141 @@ input[type="password"]:focus {
 .back-to-home a:hover {
     color: #0f8a65;
 }
+
+
+
+
+/* for mobile*/
+/* Base adjustments */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+section, header, footer {
+    padding: 2rem;
+}
+
+nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Grid responsiveness */
+.services-grid,
+.about-content,
+.contact-container,
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+/* Default to row layout */
+.about-content,
+.contact-container {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Responsive buttons and forms */
+.cta-button,
+input,
+textarea {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Typography scaling */
+h1, h2, h3, p {
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .about-content,
+    .contact-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .services-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-column {
+        text-align: center;
+    }
+
+    .hero-content {
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .section-header h2 {
+        text-align: center;
+        font-size: 1.8rem;
+    }
+
+    .loading-overlay svg {
+        width: 60vw;
+        height: 60vw;
+    }
+
+    .logo svg {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.6rem;
+    }
+
+    nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    nav ul {
+        gap: 0.5rem;
+    }
+}
