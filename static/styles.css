@@ -1570,3 +1570,260 @@ h1, h2, h3, p {
         align-items: center;
     }
 }
+
+
+
+/* styles.css */
+
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #f2f4f8;
+    color: #333;
+    line-height: 1.6;
+    padding: 0 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: #18cb96;
+}
+
+header {
+    background-color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #18cb96;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+nav ul li a {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* Hero Section */
+#hero {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.hero-content h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content .highlight {
+    color: #18cb96;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cta-button {
+    background-color: #18cb96;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.cta-button:hover {
+    background-color: #13a77c;
+}
+
+/* Section Styles */
+section {
+    padding: 2.5rem 0;
+}
+
+.section-header h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-divider {
+    height: 3px;
+    width: 50px;
+    background: #18cb96;
+    margin: 0 auto 2rem;
+    border-radius: 2px;
+}
+
+/* About and Services */
+.about-content, .services-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.stat-item, .service-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    color: #18cb96;
+    font-weight: bold;
+}
+
+.service-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* CTA Band */
+#cta-band {
+    background-color: #18cb96;
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+    border-radius: 10px;
+}
+
+#cta-band h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Contact Section */
+.contact-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.contact-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.contact-icon {
+    font-size: 1.5rem;
+    color: #18cb96;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+/* Footer */
+footer {
+    background: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #18cb96;
+    font-weight: bold;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.footer-column h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li a {
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.footer-bottom {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Mobile Responsiveness (already built-in by layout, just confirm breakpoints if needed) */
+@media (min-width: 768px) {
+    nav ul {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .about-content, .services-grid, .contact-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .stat-item, .service-card {
+        flex: 1 1 calc(50% - 1rem);
+    }
+
+    .contact-info, .contact-form {
+        flex: 1 1 48%;
+    }
+
+    .footer-links {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
