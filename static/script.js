@@ -54,3 +54,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 });
+
+//hamburger
+
+document.addEventListener('DOMContentLoaded', function() {
+    const burger = document.getElementById('burgerMenu');
+    const navLinks = document.querySelector('nav ul');
+
+    burger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+});
