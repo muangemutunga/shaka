@@ -1763,3 +1763,49 @@ nav ul.active {
         display: flex;
     }
 }
+
+
+#hero {
+    position: relative;
+    padding: 6rem 1rem 5rem;
+    text-align: center;
+    color: white;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ url_for('static', filename='images/hero-bg.jpg') }}') center/cover no-repeat;
+    background-attachment: fixed; /* Optional: creates parallax effect */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 2.8rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-visual {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.quantum-particle {
+    /* Add particle styles here */
+}
+
