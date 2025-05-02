@@ -1597,3 +1597,46 @@ footer {
 }
 
 
+/* Make navbar smaller */
+header {
+    padding: 0.5rem 0;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.logo {
+    font-size: 1rem;
+    gap: 0.25rem;
+}
+
+.logo svg {
+    width: 36px;
+    height: 36px;
+}
+
+/* Enlarge hero section */
+#hero {
+    padding: 5rem 1rem 4rem;
+    text-align: center;
+    background-color: #f2f4f8;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.hero-content .highlight {
+    color: #18cb96;
+}
+
+.cta-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
