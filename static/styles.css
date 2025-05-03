@@ -1809,3 +1809,6 @@ nav ul.active {
     /* Add particle styles here */
 }
 
+.white-text {
+    color: white;
+}
