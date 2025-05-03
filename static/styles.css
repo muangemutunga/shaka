@@ -1812,3 +1812,33 @@ nav ul.active {
 .white-text {
     color: white;
 }
+
+#flex-pay {
+    padding: 4rem 1rem;
+    text-align: center;
+    color: #333;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#flex-pay .section-header h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+#flex-pay .section-divider {
+    width: 60px;
+    height: 4px;
+    margin: 0 auto 2rem;
+    background-color: #18cb96;
+    border-radius: 2px;
+}
+
+.flex-pay-content {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
