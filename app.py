@@ -4,6 +4,9 @@ import sqlite3
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import secrets
+import os
+import boto3
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -84,6 +87,18 @@ def index():
 def application():
     return render_template('application.html')
 
+def upload_file_to_b2(file):
+    """Uploads file to Backblaze B2 and returns the URL."""
+    try:
+        filename = secure_filename(file.filename)
+        b2_client.upload_fileobj(file, bucket_name, filename)
+        # Return the publicly accessible URL for the uploaded file
+        return f"https://{bucket_name}.s3.us-west-002.backblazeb2.com/{filename}"
+
+    except Exception as e:
+        print(f"Error uploading file to Backblaze B2: {e}")
+        return None
+
 @app.route('/submit_application', methods=['POST'])
 def submit_application():
     try:
@@ -109,25 +124,17 @@ def submit_application():
             'veteran_status': request.form.get('veteran_status', '')
         }
 
-        # Create unique application folder
-        timestamp = str(int(datetime.now().timestamp()))
-        upload_dir = os.path.join(app.config['UPLOAD_FOLDER'], timestamp)
-        os.makedirs(upload_dir, exist_ok=True)
-
-        # Process file uploads
+        # Process file uploads and upload to Backblaze B2
         file_paths = {}
         for file_type in ['photo', 'resume', 'cover_letter', 'proof_residence', 'dl_front', 'dl_back']:
             file = request.files.get(file_type)
             if file and file.filename and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                relative_path = os.path.join(timestamp, filename)
-                absolute_path = os.path.join(app.config['UPLOAD_FOLDER'], relative_path)
-                file.save(absolute_path)
-                file_paths[f'{file_type}_path'] = relative_path
+                file_url = upload_file_to_b2(file)
+                file_paths[f'{file_type}_path'] = file_url
             else:
                 file_paths[f'{file_type}_path'] = None
 
-        # Save to database
+        # Save form data and file URLs to the database
         conn = sqlite3.connect('quantumly.db')
         cursor = conn.cursor()
         
@@ -149,7 +156,7 @@ def submit_application():
             file_paths['dl_back_path'],
             datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         ))
-        
+
         conn.commit()
         conn.close()
         
@@ -220,6 +227,29 @@ def logout():
     session.pop('logged_in', None)
     session.pop('username', None)
     return redirect(url_for('index'))
+
+
+
+# Initialize Boto3 client for Backblaze B2
+b2_client = boto3.client('s3',
+                         endpoint_url='https://s3.us-west-002.backblazeb2.com',  # Use appropriate endpoint for your region
+                         aws_access_key_id=os.getenv('00522d861ba108d0000000001'),
+                         aws_secret_access_key=os.getenv('K0051o0glRqgISrYmsu/2ArMZLcBEzI'))
+
+bucket_name = os.getenv('qnnotate')
+
+def upload_file_to_b2(file):
+    # Secure the filename to avoid any conflicts
+    filename = secure_filename(file.filename)
+    
+    # Upload the file to Backblaze B2
+    try:
+        b2_client.upload_fileobj(file, bucket_name, filename)
+        return f"https://{bucket_name}.s3.us-west-002.backblazeb2.com/{filename}"
+    except Exception as e:
+        print(f"Error uploading file to Backblaze B2: {e}")
+        return None
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
