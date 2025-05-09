@@ -130,7 +130,7 @@ def get_b2_client():
     try:
         return boto3.client(
             's3',
-            endpoint_url='https://s3.us-west-002.backblazeb2.com',  # Update if your region is different
+            endpoint_url='s3.us-east-005.backblazeb2.com',  
             aws_access_key_id=os.environ.get('B2_KEY_ID'),
             aws_secret_access_key=os.environ.get('B2_APP_KEY')
         )
