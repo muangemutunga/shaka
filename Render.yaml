@@ -3,9 +3,21 @@ services:
     name: quantumly
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
+    startCommand: gunicorn app:app
     envVars:
-      - key: FLASK_ENV
-        value: production
       - key: SECRET_KEY
-        value: your-random-secret-key
+        generateValue: true
+      - key: DEFAULT_ADMIN_PASSWORD
+        generateValue: true
+      - key: USE_B2_STORAGE
+        value: "true"
+      - key: B2_KEY_ID
+        sync: false
+      - key: B2_APP_KEY
+        sync: false
+      - key: B2_BUCKET_NAME
+        sync: false
+      - key: FLASK_ENV
+        value: "production"
+      - key: FLASK_DEBUG
+        value: "false"
