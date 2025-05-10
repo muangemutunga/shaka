@@ -3,27 +3,9 @@ services:
     name: quantumly
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: python app.py
     envVars:
       - key: FLASK_ENV
-        value: "production"
-      - key: FLASK_DEBUG
-        value: "false"
-      - key: FLASK_SECRET_KEY
-        fromDotEnv: true
-      - key: WTF_CSRF_SECRET_KEY
-        fromDotEnv: true
-      - key: ADMIN_USERNAME
-        fromDotEnv: true
-      - key: ADMIN_PASSWORD
-        fromDotEnv: true
-      - key: SUPABASE_URL
-        fromDotEnv: true
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        fromDotEnv: true
-      - key: SUPABASE_BUCKET_NAME
-        fromDotEnv: true
-      - key: SUPABASE_BUCKET_IS_PUBLIC
-        fromDotEnv: true
-      - key: SIGNED_URL_EXPIRY_SECONDS
-        fromDotEnv: true
+        value: production
+      - key: SECRET_KEY
+        value: your-random-secret-key
