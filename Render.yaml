@@ -5,7 +5,7 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
-      - key: SECRET_KEY
+      - key: FLASK_SECRET_KEY
         generateValue: true
       - key: DEFAULT_ADMIN_PASSWORD
         generateValue: true
@@ -21,3 +21,7 @@ services:
         value: "production"
       - key: FLASK_DEBUG
         value: "false"
+
+
+- key: FLASK_SECRET_KEY
+  generateValue: true
