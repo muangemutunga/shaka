@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Location Denied</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f4f8;
+      color: #333;
+      overflow: hidden;
+    }
+
+    .background-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.1);
+      width: 70vmin;
+      height: 70vmin;
+      z-index: 0;
+      filter: drop-shadow(0 0 10px rgba(24, 203, 150, 0.3));
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      top: 42%;
+      transform: translateY(-42%);
+      padding: 2rem;
+    }
+
+    .content h1 {
+      font-size: 2.6rem;
+      margin-bottom: 1rem;
+      color: #0a0a0a;
+    }
+
+    .content p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .button {
+      background-color: #18cb96;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .button:hover {
+      background-color: #139e76;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background-logo">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#18cb96"/>
+          <stop offset="100%" stop-color="#0f8a65"/>
+        </linearGradient>
+      </defs>
+      <circle cx="100" cy="100" r="80" fill="none" stroke="url(#gradient)" stroke-width="8" opacity="1"/>
+      <circle cx="100" cy="100" r="40" fill="url(#gradient)" opacity="1"/>
+      <circle cx="160" cy="100" r="12" fill="#18cb96" opacity="0.9">
+        <animate attributeName="cx" values="160;100;40;100;160" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="100;160;100;40;100" dur="8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="40" cy="100" r="12" fill="#18cb96" opacity="0.9">
+        <animate attributeName="cx" values="40;100;160;100;40" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="100;40;100;160;100" dur="8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="100" cy="100" r="20" fill="white" opacity="0.3">
+        <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <path d="M115,100 A15,15 0 1,1 100,85 L100,115 A15,15 0 1,1 115,100 L125,110" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="content">
+    <h1>Location Denied</h1>
+    <p>Qnnotate is not available in your location. Sorry for the inconvenience.<br>
+    We are currently only available in North America and Europe.</p>
+    <a href="/" class="button">Back to Home</a>
+  </div>
+
+</body>
+</html>
