@@ -5,20 +5,25 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
-      - key: FLASK_SECRET_KEY
-        generateValue: true
-      - key: DEFAULT_ADMIN_PASSWORD
-        generateValue: true
-      - key: USE_B2_STORAGE
-        value: "true"
-      - key: B2_KEY_ID
-        sync: false
-      - key: B2_APP_KEY
-        sync: false
-      - key: B2_BUCKET_NAME
-        sync: false
       - key: FLASK_ENV
         value: "production"
       - key: FLASK_DEBUG
         value: "false"
-
+      - key: FLASK_SECRET_KEY
+        fromDotEnv: true
+      - key: WTF_CSRF_SECRET_KEY
+        fromDotEnv: true
+      - key: ADMIN_USERNAME
+        fromDotEnv: true
+      - key: ADMIN_PASSWORD
+        fromDotEnv: true
+      - key: SUPABASE_URL
+        fromDotEnv: true
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        fromDotEnv: true
+      - key: SUPABASE_BUCKET_NAME
+        fromDotEnv: true
+      - key: SUPABASE_BUCKET_IS_PUBLIC
+        fromDotEnv: true
+      - key: SIGNED_URL_EXPIRY_SECONDS
+        fromDotEnv: true
