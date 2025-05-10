@@ -71,7 +71,25 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db()
+init_db() 
+
+#####
+def is_allowed_region():
+    if 'continent_code' in session:
+        return session['continent_code'] in ['NA', 'EU']
+
+    ip_address = request.remote_addr
+    try:
+        response = requests.get(f'http://ip-api.com/json/{ip_address}')
+        data = response.json()
+        if data['status'] == 'success':
+            session['continent_code'] = data['continentCode']
+            return data['continentCode'] in ['NA', 'EU']
+    except:
+        pass
+    return False
+
+#####
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -82,10 +100,16 @@ def index():
 
 @app.route('/application')
 def application():
+    if not is_allowed_region():
+        return render_template('restrict.html')
     return render_template('application.html')
+
 
 @app.route('/submit_application', methods=['POST'])
 def submit_application():
+    if not is_allowed_region():
+        return render_template('restrict.html')
+
     try:
         # Get form data
         form_data = {
