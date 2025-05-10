@@ -314,7 +314,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/application', methods=['GET'])
-def application_form():
+def application():
     if not supabase:
         flash("File upload service is currently unavailable. Please try again later or contact support.", "warning")
     return render_template('application.html')
