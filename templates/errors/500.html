@@ -1,0 +1,37 @@
+<!-- 500.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 - Internal Server Error</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      font-size: 50px;
+      color: #e74c3c;
+    }
+    p {
+      font-size: 20px;
+    }
+    a {
+      text-decoration: none;
+      color: #3498db;
+      font-weight: bold;
+    }
+    a:hover {
+      color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>500 - Internal Server Error</h1>
+  <p>An unexpected error occurred. We are working to fix it.</p>
+  <p>Please try again later or <a href="{{ url_for('index') }}">go to the homepage</a>.</p>
+</body>
+</html>
