@@ -22,6 +22,3 @@ services:
       - key: FLASK_DEBUG
         value: "false"
 
-
-- key: FLASK_SECRET_KEY
-  generateValue: true
