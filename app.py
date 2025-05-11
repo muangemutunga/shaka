@@ -109,38 +109,47 @@ def get_client_ip():
 def fetch_continent(ip):
     """Call GeoIP API to get continent code for IP."""
     try:
-        resp = requests.get(GEOIP_API_URL.format(ip=ip), timeout=2)
+        resp = requests.get(GEOIP_API_URL.format(ip=ip), timeout=5)
         data = resp.json()
         if data.get('status') == 'success':
+            logging.info(f"GeoIP success for {ip}: {data.get('continentCode')}")
             return data.get('continentCode')
-        logging.warning(f"GeoIP lookup failed for {ip}: {data}")
+        else:
+            logging.warning(f"GeoIP lookup failed for {ip}: {data}")
     except requests.RequestException as e:
         logging.error(f"GeoIP request error for {ip}: {e}")
+    except Exception as e:
+        logging.error(f"Unexpected error in GeoIP lookup for {ip}: {e}")
     return None
 
 
 def is_allowed_region():
     """Return True if user is in an allowed continent."""
-    # Dev bypass
+    # Dev bypass - ALWAYS allow localhost
     ip = get_client_ip()
-    if LOCALHOST_BYPASS and (ip.startswith('127.') or ip == '::1'):
+    if LOCALHOST_BYPASS and (ip.startswith('127.') or ip == '::1' or ip.lower() == 'localhost'):
+        logging.info(f"Localhost bypass for {ip}")
         return True
 
     # Use cached result if available
     continent = session.get('continent_code')
     if continent:
-        return continent in ALLOWED_CONTINENTS
+        allowed = continent in ALLOWED_CONTINENTS
+        logging.info(f"Using cached continent {continent}, allowed: {allowed}")
+        return allowed
 
     # Fetch from GeoIP
     continent = fetch_continent(ip)
     if continent:
         session['continent_code'] = continent
-        session['country'] = session.get('country') or None
-        logging.info(f"IP {ip} mapped to continent {continent}")
-        return continent in ALLOWED_CONTINENTS
-
-    # On lookup failure, deny
-    return False
+        is_allowed = continent in ALLOWED_CONTINENTS
+        logging.info(f"IP {ip} mapped to continent {continent}, allowed: {is_allowed}")
+        return is_allowed
+    
+    # If we can't determine the continent, default to allowing access
+    # You might want to change this to False in production
+    logging.warning(f"Could not determine continent for IP {ip}, defaulting to allow access")
+    return True  # Default to allowing access if we can't determine location
 
 
 def region_required(f):
@@ -229,7 +238,7 @@ def submit_application():
                 extra_language, education, payrate, hours_per_week, gender, race,
                 veteran_status, photo_path, resume_path, cover_letter_path,
                 proof_residence_path, dl_front_path, dl_back_path, date_submitted
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         ''', (
             *form_data.values(),
             file_paths['photo_path'],
@@ -317,7 +326,24 @@ def logout():
     return redirect(url_for('index'))
 
 
+# Route to debug GeoIP detection
+@app.route('/test_geoip')
+def test_geoip():
+    if not app.debug:
+        return redirect(url_for('index'))
+        
+    ip = get_client_ip()
+    continent = fetch_continent(ip)
+    is_allowed = continent in ALLOWED_CONTINENTS if continent else "Unknown"
+    
+    return jsonify({
+        "ip": ip,
+        "continent": continent,
+        "is_allowed": is_allowed,
+        "localhost_bypass": LOCALHOST_BYPASS and (ip.startswith('127.') or ip == '::1')
+    })
+
+
 if __name__ == '__main__':
     # In production, use a WSGI server like gunicorn, remove debug=True
     app.run(debug=True)
-
