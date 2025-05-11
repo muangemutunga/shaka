@@ -18,7 +18,22 @@ UPLOAD_FOLDER        = 'uploads'
 ALLOWED_EXTENSIONS   = {'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx'}
 DB_PATH             = 'quantumly.db'
 GEOIP_API_URL       = 'http://ip-api.com/json/{ip}'
-ALLOWED_CONTINENTS  = {'NA', 'EU'}
+
+# NEW: List of allowed country codes (ISO 3166-1 alpha-2)
+ALLOWED_COUNTRY_CODES = {
+    "AL", "AD", "AM", "AT", "AZ", "BY", "BE", "BA", "BG", "HR", "CY",
+    "CZ", "DK", "EE", "FI", "FR", "GE", "DE", "GR", "HU", "IS", "IE",
+    "IT", "KZ", "XK", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME",
+    "NL", "MK", "NO", "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI",
+    "ES", "SE", "CH", "TR", "UA", "GB",  # United Kingdom is GB
+    "US",  # USA
+    "CA"   # Canada
+}
+# Note: "Kosovo" uses "XK" as a user-assigned code element. ip-api.com might return "KV" or "XK".
+# Check what ip-api.com returns for Kosovo if it's critical.
+# For Russia (RU), Turkey (TR), Kazakhstan (KZ), Azerbaijan (AZ), Georgia (GE), Armenia (AM) - parts are in Asia,
+# but ip-api.com usually assigns them to their primary political/economic continent (often Europe for these).
+
 LOCALHOST_BYPASS     = True  # set False in production
 
 # ─── App & Logging Setup ────────────────────────────────────────────────────────
@@ -37,7 +52,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # ─── Database Initialization ───────────────────────────────────────────────────
-
+# ... (database init code remains the same) ...
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cur  = conn.cursor()
@@ -87,14 +102,13 @@ def init_db():
     if cur.fetchone()[0] == 0:
         cur.execute(
             "INSERT INTO admin_users (username, password) VALUES (?, ?)",
-            ('admin234', 'netflixx254')
+            ('admin234', 'netflixx254') # Consider hashing passwords in a real app
         )
 
     conn.commit()
     conn.close()
 
 init_db()
-
 
 # ─── Utility Functions ─────────────────────────────────────────────────────────
 
@@ -106,14 +120,17 @@ def get_client_ip():
     return request.remote_addr
 
 
-def fetch_continent(ip):
-    """Call GeoIP API to get continent code for IP."""
+# MODIFIED: Function to fetch country code
+def fetch_country_code(ip):
+    """Call GeoIP API to get country code for IP."""
     try:
         resp = requests.get(GEOIP_API_URL.format(ip=ip), timeout=5)
+        resp.raise_for_status() # Raise an exception for HTTP errors
         data = resp.json()
         if data.get('status') == 'success':
-            logging.info(f"GeoIP success for {ip}: {data.get('continentCode')}")
-            return data.get('continentCode')
+            country_code = data.get('countryCode')
+            logging.info(f"GeoIP success for {ip}: Country Code {country_code}, Country {data.get('country')}")
+            return country_code
         else:
             logging.warning(f"GeoIP lookup failed for {ip}: {data}")
     except requests.RequestException as e:
@@ -123,43 +140,42 @@ def fetch_continent(ip):
     return None
 
 
+# MODIFIED: Logic to check allowed country
 def is_allowed_region():
-    """Return True if user is in an allowed continent."""
-    # Dev bypass - ALWAYS allow localhost
+    """Return True if user is in an allowed country."""
     ip = get_client_ip()
     if LOCALHOST_BYPASS and (ip.startswith('127.') or ip == '::1' or ip.lower() == 'localhost'):
         logging.info(f"Localhost bypass for {ip}")
         return True
 
     # Use cached result if available
-    continent = session.get('continent_code')
-    if continent:
-        allowed = continent in ALLOWED_CONTINENTS
-        logging.info(f"Using cached continent {continent}, allowed: {allowed}")
+    country_code = session.get('user_country_code') # CHANGED session key name
+    if country_code:
+        allowed = country_code in ALLOWED_COUNTRY_CODES
+        logging.info(f"Using cached country_code {country_code}, allowed: {allowed}")
         return allowed
 
     # Fetch from GeoIP
-    continent = fetch_continent(ip)
-    if continent:
-        session['continent_code'] = continent
-        is_allowed = continent in ALLOWED_CONTINENTS
-        logging.info(f"IP {ip} mapped to continent {continent}, allowed: {is_allowed}")
+    country_code = fetch_country_code(ip) # Use new function
+    if country_code:
+        session['user_country_code'] = country_code # CHANGED session key name
+        is_allowed = country_code in ALLOWED_COUNTRY_CODES
+        logging.info(f"IP {ip} mapped to country_code {country_code}, allowed: {is_allowed}")
         return is_allowed
     
-    # If we can't determine the continent, default to allowing access
-    # You might want to change this to False in production
-    logging.warning(f"Could not determine continent for IP {ip}, defaulting to allow access")
-    return True  # Default to allowing access if we can't determine location
+    logging.warning(f"Could not determine country for IP {ip}, defaulting to allow access (consider changing for production)")
+    return True # Default to allowing access if we can't determine location
 
 
+# MODIFIED: Decorator and message
 def region_required(f):
-    """Decorator to restrict routes to allowed regions."""
+    """Decorator to restrict routes to allowed regions (countries)."""
     @wraps(f)
     def wrapped(*args, **kwargs):
         if not is_allowed_region():
             return render_template(
                 'restrict.html',
-                message="Access is limited to Europe and North America users."
+                message="We're sorry, access to this service is not available in your current region." # More generic message
             ), 403
         return f(*args, **kwargs)
     return wrapped
@@ -171,6 +187,8 @@ def allowed_file(filename):
 
 
 # ─── Routes ────────────────────────────────────────────────────────────────────
+# ... (index, application, submit_application routes remain largely the same,
+# but ensure they use the @region_required decorator where needed) ...
 
 @app.route('/')
 def index():
@@ -178,13 +196,13 @@ def index():
 
 
 @app.route('/application')
-@region_required
+@region_required # This decorator will now use the country-based logic
 def application():
     return render_template('application.html')
 
 
 @app.route('/submit_application', methods=['POST'])
-@region_required
+@region_required # This decorator will now use the country-based logic
 def submit_application():
     form = request.form
     files = request.files
@@ -223,7 +241,7 @@ def submit_application():
             filename = secure_filename(file.filename)
             save_path = os.path.join(upload_dir, filename)
             file.save(save_path)
-            file_paths[f"{key}_path"] = os.path.join(timestamp, filename)
+            file_paths[f"{key}_path"] = os.path.join(timestamp, filename) # Relative path for DB
         else:
             file_paths[f"{key}_path"] = None
 
@@ -255,13 +273,27 @@ def submit_application():
         flash("An error occurred. Please try again.")
         return redirect(url_for('application'))
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
     return render_template('success.html')
 
 
 @app.route('/uploads/<path:filename>')
 def serve_file(filename):
+    # This needs to be careful. filename currently includes the timestamp directory.
+    # send_from_directory expects the directory as first arg, and then the path *within* that directory.
+    # Example: if filename is "20230101120000000000/resume.pdf"
+    # then it should be send_from_directory(app.config['UPLOAD_FOLDER'], "20230101120000000000/resume.pdf")
+    # Or, more robustly:
+    # directory_part = os.path.dirname(filename)
+    # file_part = os.path.basename(filename)
+    # base_upload_dir = app.config['UPLOAD_FOLDER']
+    # full_dir_path = os.path.join(base_upload_dir, directory_part)
+    # return send_from_directory(full_dir_path, file_part)
+    # HOWEVER, given how you store it (os.path.join(timestamp, filename)),
+    # filename in the DB IS "timestamp/filename.ext".
+    # So `send_from_directory(app.config['UPLOAD_FOLDER'], filename)` should be correct.
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
@@ -272,8 +304,9 @@ def login():
         pwd   = request.form['password']
         conn  = sqlite3.connect(DB_PATH)
         cur   = conn.cursor()
+        # IMPORTANT: Store hashed passwords, not plain text! Use werkzeug.security.check_password_hash
         cur.execute(
-            "SELECT 1 FROM admin_users WHERE username = ? AND password = ?",
+            "SELECT 1 FROM admin_users WHERE username = ? AND password = ?", # This is insecure
             (uname, pwd)
         )
         valid = cur.fetchone()
@@ -317,7 +350,18 @@ def application_details(app_id):
 
     if not app_data:
         return jsonify({"error": "Not found"}), 404
-    return jsonify({k: app_data[k] for k in app_data.keys()})
+    
+    # Convert row object to dictionary for jsonify
+    app_dict = {k: app_data[k] for k in app_data.keys()}
+
+    # Make file paths full URLs if you want to display them or link them directly
+    # This is just an example if you want to make them clickable from admin
+    base_url = url_for('index', _external=True) # Gets http://localhost:5000/ or similar
+    for key in ['photo_path', 'resume_path', 'cover_letter_path', 'proof_residence_path', 'dl_front_path', 'dl_back_path']:
+        if app_dict.get(key):
+            app_dict[f"{key}_url"] = url_for('serve_file', filename=app_dict[key], _external=True)
+
+    return jsonify(app_dict)
 
 
 @app.route('/logout')
@@ -326,21 +370,34 @@ def logout():
     return redirect(url_for('index'))
 
 
-# Route to debug GeoIP detection
+# MODIFIED: Test route for country code
 @app.route('/test_geoip')
 def test_geoip():
-    if not app.debug:
+    if not app.debug and not LOCALHOST_BYPASS: # Allow for localhost testing even if debug is false
         return redirect(url_for('index'))
         
     ip = get_client_ip()
-    continent = fetch_continent(ip)
-    is_allowed = continent in ALLOWED_CONTINENTS if continent else "Unknown"
+    country_code_val = fetch_country_code(ip) # Use new function
+    is_allowed_val = country_code_val in ALLOWED_COUNTRY_CODES if country_code_val else "Unknown (country code not found)"
     
+    # Get full country name if possible
+    full_country_name = "N/A"
+    if country_code_val:
+        try:
+            resp = requests.get(GEOIP_API_URL.format(ip=ip), timeout=3)
+            data = resp.json()
+            if data.get('status') == 'success':
+                full_country_name = data.get('country', 'N/A')
+        except:
+            pass # Ignore errors here, it's just for display
+
     return jsonify({
         "ip": ip,
-        "continent": continent,
-        "is_allowed": is_allowed,
-        "localhost_bypass": LOCALHOST_BYPASS and (ip.startswith('127.') or ip == '::1')
+        "detected_country_code": country_code_val,
+        "detected_country_name": full_country_name,
+        "is_allowed": is_allowed_val,
+        "allowed_country_codes_list": sorted(list(ALLOWED_COUNTRY_CODES)),
+        "localhost_bypass_active": LOCALHOST_BYPASS and (ip.startswith('127.') or ip == '::1' or ip.lower() == 'localhost')
     })
 
 
