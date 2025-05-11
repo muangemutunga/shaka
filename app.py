@@ -78,7 +78,7 @@ def is_allowed_region():
     if 'continent_code' in session:
         return session['continent_code'] in ['NA', 'EU']
 
-    ip_address = request.remote_addr
+    ip_address = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
     try:
         response = requests.get(f'http://ip-api.com/json/{ip_address}')
         data = response.json()
