@@ -167,14 +167,14 @@
                     $('#app-race').text(data.race || 'Not specified');
                     $('#app-veteran').text(data.veteran_status || 'Not specified');
                     
-                    // Add file links
+                    // Add file links - FIXED VERSION
                     const fileTypes = {
-                        'photo_path': 'Photo',
-                        'resume_path': 'Resume',
-                        'cover_letter_path': 'Cover Letter',
-                        'proof_residence_path': 'Proof of Residence',
-                        'dl_front_path': 'DL Front',
-                        'dl_back_path': 'DL Back'
+                        'photo_path_url': 'Photo',
+                        'resume_path_url': 'Resume',
+                        'cover_letter_path_url': 'Cover Letter',
+                        'proof_residence_path_url': 'Proof of Residence',
+                        'dl_front_path_url': 'DL Front',
+                        'dl_back_path_url': 'DL Back'
                     };
                     
                     for (const [key, label] of Object.entries(fileTypes)) {
